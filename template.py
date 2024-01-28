@@ -39,6 +39,7 @@ list_of_files=[
     "dvc.yaml",
     "params.yaml",
     "requirements.txt",
+    "requirements_dev.txt",
     "setup.py",
     "research/trails.ipynb",
     "templates/index.html",
