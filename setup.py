@@ -18,7 +18,7 @@ def get_requirements(file_path:str)->List[str]:
     return requirements
 
 
-__version__ = "0.0.1.1"
+__version__ = "0.0.2"
 
 REPO_NAME = "e2e_mlops_dimond_price_prediction"
 AUTHOR_USER_NAME = "satish0308"
