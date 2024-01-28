@@ -8,6 +8,7 @@ __pycache__/
 
 # Distribution / packaging
 .mlops/
+kaggle.*
 mlops/
 .Python
 build/
@@ -59,6 +60,7 @@ cover/
 
 # Django stuff:
 *.log
+kaggle.json
 local_settings.py
 db.sqlite3
 db.sqlite3-journal

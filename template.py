@@ -35,12 +35,13 @@ list_of_files=[
     "experiments/experiments.ipynb",
     "config/config.yaml",
     "dvc.yaml",
-    "parmas.yaml",
+    "params.yaml",
     "requirements.txt",
     "setup.py",
     "research/trails.ipynb",
     "templates/index.html",
-    "main.py"
+    "main.py",
+    "kaggle.json"
 ]
 
 for filepath in list_of_files:
