@@ -43,5 +43,5 @@ setuptools.setup(
     },
     package_dir={"": "src"},
     packages=setuptools.find_packages(where="src"),
-    install_requires=get_requirements('requirements.txt')
+    install_requires=get_requirements(r'requirements.txt')
 )
