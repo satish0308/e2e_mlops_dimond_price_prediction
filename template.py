@@ -9,7 +9,7 @@ logging.basicConfig(
 
  )
 
-project_name ="Diamond Price Predictor"
+project_name ="diamondPricePredictor"
 
 list_of_files=[
     ".github/workflows/.gitkeep",

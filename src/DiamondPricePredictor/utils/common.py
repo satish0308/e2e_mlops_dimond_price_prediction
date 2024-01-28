@@ -1,9 +1,9 @@
 import os
 from box.exceptions import BoxValueError
 import yaml
-from cnnClassifier import logger
 import json
 import joblib
+from src.diamondPricePredictor import logger
 from ensure import ensure_annotations
 from box import ConfigBox
 from pathlib import Path
