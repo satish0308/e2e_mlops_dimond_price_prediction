@@ -1,7 +1,9 @@
 import os
+import sys
 from box.exceptions import BoxValueError
 import yaml
 import json
+import dill
 import joblib
 from DiamondPricePredictor.logger import logging
 from ensure import ensure_annotations
@@ -9,7 +11,9 @@ from box import ConfigBox
 from pathlib import Path
 from typing import Any
 import base64
-
+from pathlib import Path
+from DiamondPricePredictor.logger import logging
+from DiamondPricePredictor.exception import CustomException
 
 @ensure_annotations
 def read_yaml(path_to_yaml: Path) -> ConfigBox:
@@ -52,19 +56,34 @@ def create_directories(path_to_directories: list, verbose=True):
 
 
 @ensure_annotations
-def save_json(path: Path, data: dict):
+def save_json(path: str, data: dict):
     """save json data
 
     Args:
         path (Path): path to json file
         data (dict): data to be saved in json file
     """
-    with open(path, "w") as f:
+    path = Path(path)
+    print(path)
+    with open(path,"w") as f:
         json.dump(data, f, indent=4)
 
     logging.info(f"json file saved at: {path}")
 
+@ensure_annotations
+def save_loaded_json(path: str, data: ConfigBox):
+    """save json data
 
+    Args:
+        path (str): path to json file
+        data (configbox): data to be saved in json file
+    """
+    path = Path(path)
+    print(path)
+    with path.open("w") as f:
+        json.dump(data, f, indent=4)
+
+    logging.info(f"json file saved at: {path}")
 
 
 @ensure_annotations
@@ -134,6 +153,16 @@ def decodeImage(imgstring, fileName):
 def encodeImageIntoBase64(croppedImagePath):
     with open(croppedImagePath, "rb") as f:
         return base64.b64encode(f.read())
+
+def save_obj(file_path,obj):
+    try:
+        dire_path=os.path.dirname(file_path)
+        os.makedirs(dire_path,exist_ok=True)
+        with open(file_path,"wb") as file_Obj:
+            joblib.dump(obj,file_Obj)
+
+    except Exception as e:
+        raise CustomException(sys,e)
 
 if __name__ == "__main__":
     logging.info("Logger is set for common.py file")

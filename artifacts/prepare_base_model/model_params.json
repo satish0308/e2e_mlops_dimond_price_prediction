@@ -1,0 +1,13 @@
+{
+    "models": {
+        "Decision Tree": "DecisionTreeRegressor()"
+    },
+    "params": {
+        "Decision Tree": {
+            "splitter": [
+                "best",
+                "random"
+            ]
+        }
+    }
+}
