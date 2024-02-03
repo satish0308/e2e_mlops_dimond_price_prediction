@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib
 import seaborn as sns
+from IPython.display import display
 from scipy.stats import skew, kurtosis
 import missingno as msno
 from colorama import Fore, Back, Style
