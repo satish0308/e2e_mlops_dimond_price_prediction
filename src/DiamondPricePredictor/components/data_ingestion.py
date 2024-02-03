@@ -2,9 +2,9 @@ import os
 import urllib.request as request
 import zipfile
 from pathlib import Path
-from DiamondPricePredictor.logger import logging
-from DiamondPricePredictor.utils.common import get_size
-from DiamondPricePredictor.entity.config_entity import DataIngestionConfig
+from src.DiamondPricePredictor.logger import logging
+from src.DiamondPricePredictor.utils.common import get_size
+from src.DiamondPricePredictor.entity.config_entity import DataIngestionConfig
 
 import kaggle
 from kaggle.api.kaggle_api_extended import KaggleApi

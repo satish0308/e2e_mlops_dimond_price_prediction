@@ -1,6 +1,6 @@
-from DiamondPricePredictor.config.configuration import ConfigurationManager
-from DiamondPricePredictor.components.data_model_train import PrepareBaseModel
-from DiamondPricePredictor.logger import logging
+from src.DiamondPricePredictor.config.configuration import ConfigurationManager
+from src.DiamondPricePredictor.components.data_model_train import PrepareBaseModel
+from src.DiamondPricePredictor.logger import logging
 
 
 STAGE_NAME = "Data Transformation and model stage"

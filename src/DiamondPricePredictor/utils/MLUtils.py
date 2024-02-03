@@ -26,8 +26,8 @@ from box.exceptions import BoxValueError
 import yaml
 import json
 import joblib
-from DiamondPricePredictor.logger import logging
-from DiamondPricePredictor.exception import CustomException
+from src.DiamondPricePredictor.logger import logging
+from src.DiamondPricePredictor.exception import CustomException
 from ensure import ensure_annotations
 from box import ConfigBox
 from typing import Any,List

@@ -1,6 +1,6 @@
-from DiamondPricePredictor.logger import logging
-from DiamondPricePredictor.pipeline.stage_01_data_ingestion import DataIngestionTrainingPipeline
-from DiamondPricePredictor.pipeline.stage_02_data_transofrm_model import ModelCreationTrainingPipeline
+from src.DiamondPricePredictor.logger import logging
+from src.DiamondPricePredictor.pipeline.stage_01_data_ingestion import DataIngestionTrainingPipeline
+from src.DiamondPricePredictor.pipeline.stage_02_data_transofrm_model import ModelCreationTrainingPipeline
 
 
 

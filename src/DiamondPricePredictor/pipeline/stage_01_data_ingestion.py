@@ -1,6 +1,6 @@
-from DiamondPricePredictor.config.configuration import ConfigurationManager
-from DiamondPricePredictor.components.data_ingestion import DataIngestion
-from DiamondPricePredictor.logger import logging
+from src.DiamondPricePredictor.config.configuration import ConfigurationManager
+from src.DiamondPricePredictor.components.data_ingestion import DataIngestion
+from src.DiamondPricePredictor.logger import logging
 
 
 STAGE_NAME = "Data Ingestion stage"

@@ -5,14 +5,14 @@ import yaml
 import json
 import dill
 import joblib
-from DiamondPricePredictor.logger import logging
+from src.DiamondPricePredictor.logger import logging
 from ensure import ensure_annotations
 from box import ConfigBox
 from pathlib import Path
 from typing import Any
 import base64
 from pathlib import Path
-from DiamondPricePredictor.exception import CustomException
+from src.DiamondPricePredictor.exception import CustomException
 
 @ensure_annotations
 def read_yaml(path_to_yaml: Path) -> ConfigBox:

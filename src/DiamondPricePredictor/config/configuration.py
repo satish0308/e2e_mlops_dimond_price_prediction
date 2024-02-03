@@ -1,9 +1,9 @@
 import os
 from pathlib import Path
-from DiamondPricePredictor.exception import CustomException
-from DiamondPricePredictor.constants import *
-from DiamondPricePredictor.utils.common import read_yaml, create_directories,save_loaded_json,load_json
-from DiamondPricePredictor.entity.config_entity import DataIngestionConfig,PrepareBaseModelConfig
+from src.DiamondPricePredictor.exception import CustomException
+from src.DiamondPricePredictor.constants import *
+from src.DiamondPricePredictor.utils.common import read_yaml, create_directories,save_loaded_json,load_json
+from src.DiamondPricePredictor.entity.config_entity import DataIngestionConfig,PrepareBaseModelConfig
 
 
 
