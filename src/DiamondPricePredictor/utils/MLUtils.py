@@ -159,15 +159,17 @@ def DataTransformation(x_train:pd.DataFrame,y_train:pd.DataFrame,x_test:pd.DataF
                 obj=preprocessor
             )
        
-        def transform_lebal_data(data):
-            log_price_data = np.log1p(data)
-            normalized_log_price_data = (log_price_data - log_price_data.min()) / (log_price_data.max() - log_price_data.min())
-            return normalized_log_price_data
+        #def transform_lebal_data(data):
+        #    log_price_data = np.log1p(data)
+        #    normalized_log_price_data = (log_price_data - log_price_data.min()) / (log_price_data.max() - log_price_data.min())
+        #    return normalized_log_price_data
         
 
-        y_train_t = transform_lebal_data(y_train)
-        y_test_t = transform_lebal_data(y_test)
+        #y_train_t = transform_lebal_data(y_train)
+        #y_test_t = transform_lebal_data(y_test)
         
+        y_train_t = y_train
+        y_test_t = y_test
 
         
 

@@ -164,17 +164,17 @@ def save_obj(file_path,obj):
     except Exception as e:
         raise CustomException(sys,e)
 
-def save_object(file_path, obj):
-    try:
-        dir_path = os.path.dirname(file_path)
-
-        os.makedirs(dir_path, exist_ok=True)
-
-        with open(file_path, "wb") as file_obj:
-            pickle.dump(obj, file_obj)
-
-    except Exception as e:
-        raise CustomException(e, sys)
+#def save_object(file_path, obj):
+#    try:
+#        dir_path = os.path.dirname(file_path)
+#
+#        os.makedirs(dir_path, exist_ok=True)
+#
+#        with open(file_path, "wb") as file_obj:
+#            pickle.dump(obj, file_obj)
+#
+ #   except Exception as e:
+#        raise CustomException(e, sys)
 
 if __name__ == "__main__":
     logging.info("Logger is set for common.py file")
