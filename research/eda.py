@@ -6,6 +6,7 @@ import seaborn as sns
 from scipy.stats import skew, kurtosis
 import missingno as msno
 from colorama import Fore, Back, Style
+from IPython.display import display
 
 plt.style.use("fivethirtyeight")
 pd.set_option("display.max_columns", 500)

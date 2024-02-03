@@ -1,6 +1,5 @@
 import os
 from pathlib import Path
-#from src.CNNClassifier.logger import logging
 import logging
 
 logging.basicConfig(
