@@ -70,7 +70,7 @@ class PrepareBaseModel:
 
             save_json(base_model_path,best_model_dict)
 
-            print(root_dir)
+            
             #save_obj(
             #    file_path=base_model_path,
             #    obj=best_model
@@ -78,7 +78,7 @@ class PrepareBaseModel:
             
             r2_score_best_model=best_score(root_dir,best_model,x_train_t,y_train_t)
 
-            print(r2_score_best_model)
+            
 
             return r2_score_best_model
         except Exception as e:

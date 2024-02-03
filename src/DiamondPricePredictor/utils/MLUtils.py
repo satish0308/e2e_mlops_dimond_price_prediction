@@ -3,7 +3,6 @@ import sys
 from dataclasses import dataclass
 from pathlib import Path
 import pickle
-from dataclasses import dataclass
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt 
@@ -37,7 +36,6 @@ from sklearn.metrics import r2_score
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import train_test_split
 from sklearn.compose import ColumnTransformer
-from sklearn.preprocessing import OneHotEncoder,StandardScaler
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
 
@@ -94,7 +92,7 @@ def evaluate_model(x_train,y_train,x_test,y_test,models,param):
             logging.info(f"the Current model select {param_grid} for the model {model}")
             model = eval(model)
             gs=GridSearchCV(estimator=model, param_grid=param_grid, cv=3)
-            print('hello')
+            
             gs.fit(x_train,y_train)
             
             model.set_params(**gs.best_params_)
@@ -130,8 +128,7 @@ def DataTransformation(x_train:pd.DataFrame,y_train:pd.DataFrame,x_test:pd.DataF
                 raise ValueError("Input data contains null values. Please handle null values before transformation.")
 
             # Print statistics of input data before transformations
-            print("Input Data Statistics:")
-            print(data.describe())
+           
 
             # Create transformers
             numeric_transformer = StandardScaler()
@@ -139,15 +136,12 @@ def DataTransformation(x_train:pd.DataFrame,y_train:pd.DataFrame,x_test:pd.DataF
 
             # Apply transformations to numerical features
             num_transformed = numeric_transformer.fit_transform(data[num_features].astype('float'))
-            print("Transformed Numerical Data Statistics:")
-            print(pd.DataFrame(num_transformed, columns=num_features).describe())
-
+           
             # Apply transformations to categorical features
             cat_transformed = pd.DataFrame()
             for col in cat_features:
                 cat_transformed[col] = label_encoding.fit_transform(data[col].astype('str'))
-            print("Transformed Categorical Data Statistics:")
-            print(cat_transformed.describe())
+         
 
             # Concatenate the transformed numerical and categorical features
             transformed_data = pd.concat([pd.DataFrame(num_transformed, columns=num_features), cat_transformed], axis=1)
@@ -166,8 +160,7 @@ def DataTransformation(x_train:pd.DataFrame,y_train:pd.DataFrame,x_test:pd.DataF
             cat_transformed = pd.DataFrame()
             for col in cat_features:
                 cat_transformed[col] = label_encoding_test.fit_transform(data[col].astype('str'))
-            print("Transformed Categorical Data Statistics:")
-            print(cat_transformed.describe())
+         
             # Concatenate the transformed numerical and categorical features
             transformed_data_test = pd.concat([pd.DataFrame(num_transformed, columns=num_features), cat_transformed], axis=1)
 

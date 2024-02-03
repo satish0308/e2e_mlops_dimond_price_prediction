@@ -12,7 +12,6 @@ from pathlib import Path
 from typing import Any
 import base64
 from pathlib import Path
-from DiamondPricePredictor.logger import logging
 from DiamondPricePredictor.exception import CustomException
 
 @ensure_annotations
