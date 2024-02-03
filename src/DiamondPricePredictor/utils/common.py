@@ -63,7 +63,7 @@ def save_json(path, data: dict):
         data (dict): data to be saved in json file
     """
     path = Path(path)
-    print(path)
+    
     with open(path,"w") as f:
         json.dump(data, f, indent=4)
 
@@ -77,9 +77,9 @@ def save_loaded_json(path: str, data: ConfigBox):
         path (str): path to json file
         data (configbox): data to be saved in json file
     """
-    path = Path(path)
-    print(path)
-    with path.open("w") as f:
+    path_to_open = Path(path)
+    
+    with path_to_open.open("w") as f:
         json.dump(data, f, indent=4)
 
     logging.info(f"json file saved at: {path}")
