@@ -20,14 +20,15 @@ from catboost import CatBoostRegressor
 from xgboost import XGBRegressor
 from sklearn.model_selection import train_test_split
 #import warnings
-from sklearn.preprocessing import OneHotEncoder, StandardScaler, LabelEncoder
+from sklearn.preprocessing import OneHotEncoder, StandardScaler, LabelEncoder,OrdinalEncoder
 import os
 from box.exceptions import BoxValueError
 import yaml
 import json
 import joblib
-from src.DiamondPricePredictor.logger import logging
-from src.DiamondPricePredictor.exception import CustomException
+from DiamondPricePredictor.logger import logging
+from DiamondPricePredictor.exception import CustomException
+from DiamondPricePredictor.utils.common import save_obj
 from ensure import ensure_annotations
 from box import ConfigBox
 from typing import Any,List
@@ -113,65 +114,50 @@ def evaluate_model(x_train,y_train,x_test,y_test,models,param):
         raise e
 
 @ensure_annotations   
-def DataTransformation(x_train:pd.DataFrame,y_train:pd.DataFrame,x_test:pd.DataFrame,y_test:pd.DataFrame):
+def DataTransformation(x_train:pd.DataFrame,y_train:pd.DataFrame,x_test:pd.DataFrame,y_test:pd.DataFrame,repro_path):
     
     
     try:
         num_features = x_train.select_dtypes(exclude="object").columns
         cat_features = x_train.select_dtypes(include="object").columns
-    
-        #Imputer=SimpleImputer(strategy="median")
-
-        def transform_data_train(data, num_features, cat_features):
-            # Check for null values in input data
-            if data.isnull().any().any():
-                raise ValueError("Input data contains null values. Please handle null values before transformation.")
-
-            # Print statistics of input data before transformations
-           
-
-            # Create transformers
-            numeric_transformer = StandardScaler()
-            label_encoding = LabelEncoder()
-
-            # Apply transformations to numerical features
-            num_transformed = numeric_transformer.fit_transform(data[num_features].astype('float'))
-           
-            # Apply transformations to categorical features
-            cat_transformed = pd.DataFrame()
-            for col in cat_features:
-                cat_transformed[col] = label_encoding.fit_transform(data[col].astype('str'))
-         
-
-            # Concatenate the transformed numerical and categorical features
-            transformed_data = pd.concat([pd.DataFrame(num_transformed, columns=num_features), cat_transformed], axis=1)
-
-            return transformed_data
         
-        def transform_data_test(data, num_features, cat_features):
-            # Create transformers
-            numeric_transformer_test = StandardScaler()
-            label_encoding_test = LabelEncoder()
+        logging.info(f"{cat_features} These Are Categorical features ")
+        logging.info(f"{num_features} These Are Numerical features")
 
-            # Apply transformations to numerical features
-            num_transformed = numeric_transformer_test.fit_transform(data[num_features].astype('float'))
+        num_pipeline=Pipeline(
+                steps=[
+                ('imputer',SimpleImputer(strategy='median')),
+                ('scaler',StandardScaler())
 
-            # Apply transformations to categorical features column by column
-            cat_transformed = pd.DataFrame()
-            for col in cat_features:
-                cat_transformed[col] = label_encoding_test.fit_transform(data[col].astype('str'))
-         
-            # Concatenate the transformed numerical and categorical features
-            transformed_data_test = pd.concat([pd.DataFrame(num_transformed, columns=num_features), cat_transformed], axis=1)
+                ]
 
-            return transformed_data_test
+            )
+            
+            # Categorigal Pipeline
+        cat_pipeline=Pipeline(
+                steps=[
+                ('imputer',SimpleImputer(strategy='most_frequent')),
+                ('ordinalencoder',OrdinalEncoder()),
+                ('scaler',StandardScaler())
+                ]
+
+            )
+            
+        preprocessor=ColumnTransformer([
+            ('num_pipeline',num_pipeline,num_features),
+            ('cat_pipeline',cat_pipeline,cat_features)
+            ])
         
-        x_train_t=transform_data_train(x_train,num_features,cat_features)
+        x_train_t=preprocessor.fit_transform(x_train)
        
-        x_test_t=transform_data_test(x_test,num_features,cat_features)
+        x_test_t=preprocessor.transform(x_test)
     
+        preproc_path = Path(repro_path).joinpath('preprocessor.joblib')
 
-        
+        save_obj(
+                file_path=preproc_path,
+                obj=preprocessor
+            )
        
         def transform_lebal_data(data):
             log_price_data = np.log1p(data)
@@ -183,14 +169,7 @@ def DataTransformation(x_train:pd.DataFrame,y_train:pd.DataFrame,x_test:pd.DataF
         y_test_t = transform_lebal_data(y_test)
         
 
-        logging.info(f"The shape of Transformed X_train {x_train_t.shape}")
-        logging.info(f"The head of Transformed X_test {x_train_t.head}")
-        logging.info(f"The shape of Transformed  Transformed X_test {x_test_t.shape}")
-        logging.info(f"The head of Transformed X_train {x_test_t.head}")
-        logging.info(f"The shape of Transformed y_train {y_train_t.shape}")
-        logging.info(f"The head of Transformed  y_train {y_train_t.head}")
-        logging.info(f"The shape of Transformed y_train {y_test_t.shape}")
-        logging.info(f"The head of Transformed y_test {y_test_t.head}")
+        
 
         return  x_train_t,y_train_t,x_test_t,y_test_t
     except BoxValueError:

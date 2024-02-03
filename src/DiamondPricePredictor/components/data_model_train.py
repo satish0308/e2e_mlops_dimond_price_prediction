@@ -40,7 +40,7 @@ class PrepareBaseModel:
             
     
             
-            x_train_t,y_train_t,x_test_t,y_test_t=DataTransformation(x_train,y_train,x_test,y_test)
+            x_train_t,y_train_t,x_test_t,y_test_t=DataTransformation(x_train,y_train,x_test,y_test,root_dir)
 
             model_and_parameters=load_json(model_param_file)
             
