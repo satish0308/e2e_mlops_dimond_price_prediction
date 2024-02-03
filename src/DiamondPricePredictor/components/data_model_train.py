@@ -5,12 +5,11 @@ import urllib.request as request
 import zipfile
 from pathlib import Path
 from DiamondPricePredictor.logger import logging
-from DiamondPricePredictor.utils.common import get_size
 from DiamondPricePredictor.utils.MLUtils import PrepareData,SplitDataSet,evaluate_model,DataTransformation,best_score
 from DiamondPricePredictor.exception import CustomException
 from DiamondPricePredictor.entity.config_entity import PrepareBaseModelConfig
 from DiamondPricePredictor.constants import *
-from DiamondPricePredictor.utils.common import read_yaml, create_directories,load_json,save_loaded_json,save_json,save_obj
+from DiamondPricePredictor.utils.common import read_yaml, create_directories,load_json,save_loaded_json,save_json,save_obj,get_size
 
 
 
