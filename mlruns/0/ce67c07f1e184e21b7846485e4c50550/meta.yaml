@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/satish.hiremath/OneDrive%20-%20o9%20Solutions/Desktop/python/e2e_mlops_dimond_price_prediction/e2e_mlops_dimond_price_prediction/mlruns/0/ce67c07f1e184e21b7846485e4c50550/artifacts
+end_time: 1707056905289
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: ce67c07f1e184e21b7846485e4c50550
+run_name: rebellious-bat-982
+run_uuid: ce67c07f1e184e21b7846485e4c50550
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1707056613490
+status: 3
+tags: []
+user_id: satish.hiremath

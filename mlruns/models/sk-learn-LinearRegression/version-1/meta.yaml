@@ -1,0 +1,13 @@
+aliases: []
+creation_timestamp: 1707056680510
+current_stage: None
+description: null
+last_updated_timestamp: 1707056680510
+name: sk-learn-LinearRegression
+run_id: ce67c07f1e184e21b7846485e4c50550
+run_link: null
+source: file:///C:/Users/satish.hiremath/OneDrive%20-%20o9%20Solutions/Desktop/python/e2e_mlops_dimond_price_prediction/e2e_mlops_dimond_price_prediction/mlruns/0/ce67c07f1e184e21b7846485e4c50550/artifacts/sklearn-model
+status: READY
+status_message: null
+user_id: null
+version: 1

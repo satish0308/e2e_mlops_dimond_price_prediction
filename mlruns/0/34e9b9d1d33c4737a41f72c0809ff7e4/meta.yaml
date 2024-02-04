@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/satish.hiremath/OneDrive%20-%20o9%20Solutions/Desktop/python/e2e_mlops_dimond_price_prediction/e2e_mlops_dimond_price_prediction/mlruns/0/34e9b9d1d33c4737a41f72c0809ff7e4/artifacts
+end_time: 1707057323127
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 34e9b9d1d33c4737a41f72c0809ff7e4
+run_name: agreeable-turtle-411
+run_uuid: 34e9b9d1d33c4737a41f72c0809ff7e4
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1707057027277
+status: 3
+tags: []
+user_id: satish.hiremath

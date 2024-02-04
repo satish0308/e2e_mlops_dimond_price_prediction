@@ -1,4 +1,5 @@
 import os
+import re
 import sys
 from dataclasses import dataclass
 from pathlib import Path
@@ -39,7 +40,10 @@ from sklearn.model_selection import train_test_split
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
-
+import mlflow
+import mlflow.sklearn
+from mlflow.models import infer_signature
+from urllib.parse import urlparse
 
 @ensure_annotations
 def PrepareData(path_of_files: Path,Target_Column:str,Drop_Columns:List):
@@ -84,34 +88,90 @@ def SplitDataSet(feature_data:pd.DataFrame,Target_data:pd.DataFrame,split_ratio:
 def evaluate_model(x_train,y_train,x_test,y_test,models,param):
     try:
         report={}
-        for i in range(len(list(models))):
-            model = list(models.values())[i]
-            param_grid=param[list(models.keys())[i]]
-            print(model)
-            print(param_grid)
-            model_name=model
-            logging.info(f"the Current model select {param_grid} for the model {model}")
-            model = eval(model)
-            gs=GridSearchCV(estimator=model, param_grid=param_grid, cv=3)
-            
-            gs.fit(x_train,y_train)
-            
-            model.set_params(**gs.best_params_)
-            logging.info(f"The Best Working Model {model}")
-            model.fit(x_train,y_train)
-            joblib.dump(model, 'artifacts/prepare_base_model/'+model_name[:-2]+'.joblib')
-            y_train_pred=model.predict(x_train)
-            y_test_pred=model.predict(x_test)
+        with mlflow.start_run() as run:
+            for i in range(len(list(models))):
+                model = list(models.values())[i]
+                param_grid=param[list(models.keys())[i]]
+                print(model)
+                print(param_grid)
 
-            train_model_score=r2_score(y_train,y_train_pred)
-            test_model_score=r2_score(y_test,y_test_pred)
+                model_name=model
+                logging.info(f"the Current model select {param_grid} for the model {model}")
+                model = eval(model)
+                gs=GridSearchCV(estimator=model, param_grid=param_grid, cv=3)
+                
+                gs.fit(x_train,y_train)
+                
+                best_param=gs.best_params_
 
-        
-            report[list(models.keys())[i]] = test_model_score
+                model.set_params(**gs.best_params_)
+                logging.info(f"The Best Working Model {model}")
+                model.fit(x_train,y_train)
+                joblib.dump(model, 'artifacts/prepare_base_model/'+model_name[:-2]+'.joblib')
+                y_train_pred=model.predict(x_train)
+                y_test_pred=model.predict(x_test)
+
+                train_model_score=r2_score(y_train,y_train_pred)
+                test_model_score=r2_score(y_test,y_test_pred)
+
+                def evaluate_model_scores(true, predicted):
+                    mae = mean_absolute_error(true, predicted)
+                    mse = mean_squared_error(true, predicted)
+                    rmse = np.sqrt(mean_squared_error(true, predicted))
+                    r2_square = r2_score(true, predicted)
+                    return mae, mse,rmse, r2_square
+
+
+                model_train_mae ,model_train_mae, model_train_rmse, model_train_r2 = evaluate_model_scores(y_train, y_train_pred)
+
+                model_test_mae ,model_test_mae, model_test_rmse, model_test_r2 = evaluate_model_scores(y_test, y_test_pred)
+       
+
+
+                report[list(models.keys())[i]] = test_model_score
+
+                #y_pred = model.predict(x_test)
+                #signature = infer_signature(x_test, y_pred)
+                print('hello')
+                
+                #mlflow.log_params(model_name[:-2]+str(best_param))
+                class_name = re.search(r'([a-zA-Z]+)', model_name).group()
+                param_prefix = f"{class_name}_"
+                metric_prefix = model_name[:-2]
+                print(param_prefix)
+                #mlflow.log_params({param_prefix + param: value for param, value in best_param.items()})
+                mlflow.log_params({param_prefix + param.replace('/', '_').replace(' ', '_').replace('-', '_'): value for param, value in best_param.items()})
+                mlflow.log_metrics({
+                    f"{param_prefix}_train_mae": model_train_mae,
+                    f"{param_prefix}_train_rmse": model_train_rmse,
+                    f"{param_prefix}_train_r2": model_train_r2,
+                    f"{param_prefix}_test_mae": model_test_mae,
+                    f"{param_prefix}_test_rmse": model_test_rmse,
+                    f"{param_prefix}_test_r2": model_test_r2
+                })
+
+                remote_server_uri="https://dagshub.com/satish0308/e2e_mlops_dimond_price_prediction.mlflow"
+                mlflow.set_tracking_uri(remote_server_uri)
+
+                tracking_url_type_store = urlparse(mlflow.get_tracking_uri()).scheme
+
+                print(model)
+                # Model registry does not work with file store
+                if tracking_url_type_store != "file":
+                    mlflow.sklearn.log_model(model,"model",registered_model_name=param_prefix)
+                else:
+                    mlflow.sklearn.log_model(model,'model')
+
+                #mlflow.sklearn.log_model(
+                #    sk_model=model,
+                #    artifact_path="sklearn-model",
+                #    signature=signature,
+                #    registered_model_name="sk-learn-"+model_name[:-2],
+                #    )
         return report
 
     except Exception as e:
-        raise e
+        raise CustomException(e,sys)
 
 @ensure_annotations   
 def DataTransformation(x_train:pd.DataFrame,y_train:pd.DataFrame,x_test:pd.DataFrame,y_test:pd.DataFrame,repro_path):
@@ -167,11 +227,22 @@ def DataTransformation(x_train:pd.DataFrame,y_train:pd.DataFrame,x_test:pd.DataF
 
         #y_train_t = transform_lebal_data(y_train)
         #y_test_t = transform_lebal_data(y_test)
-        
-        y_train_t = y_train
-        y_test_t = y_test
+                    
+        #y_train_t = np.array(y_train).reshape(-1,)
+        #y_test_t = np.array(y_test).reshape(-1,)
 
+        y_train_t=y_train.values.ravel()
+        y_test_t=y_test.values.ravel()   
         
+        logging.info(f"The shape of X_train {type(x_train_t)}")
+        logging.info(f"The head of X_test {x_train_t.shape}")
+        logging.info(f"The shape of X_test {type(x_test_t)}")
+        logging.info(f"The head of X_train {x_test_t.shape}")
+        logging.info(f"The shape of y_train {type(y_train_t)}")
+        logging.info(f"The head of y_train {y_train_t.shape}")
+        logging.info(f"The shape of y_train {type(y_test_t)}")
+        logging.info(f"The head of y_test {y_test_t.shape}")
+
 
         return  x_train_t,y_train_t,x_test_t,y_test_t
     except BoxValueError:

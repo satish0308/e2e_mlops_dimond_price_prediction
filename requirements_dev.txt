@@ -31,4 +31,5 @@ pymongo[srv]
 dnspython
 kaggle
 missingno
+mlflow==2.5.0
 -e .
